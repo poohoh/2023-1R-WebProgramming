@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
+  const [count, setCount] = useState(0);
   const [row, setRow] = useState([]);
 
   useEffect(() => {
@@ -31,6 +32,14 @@ function App() {
     console.log('update only');
   }, [row]);
 
+  useEffect(() => {
+    document.title = `You clicked ${count} times`;
+
+    return () => {
+      document.title = 'Vite + React';
+    };
+  }, [count]);
+
   // if(row.length == 0) {
   //   const res = fetch("http://openapi.seoul.go.kr:8088/4f45526e78706f6f37384d6d576b53/json/RealtimeCityAir/1/25/").then(
   //     function(res2) {
@@ -57,6 +66,14 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.jsx</code> and save to test HMR
+        </p>
+      </div>
       <table>
         <thead>
           <th>이름</th>
