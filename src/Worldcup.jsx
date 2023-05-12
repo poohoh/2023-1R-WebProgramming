@@ -50,11 +50,13 @@ function Worldcup() {
     }, []);
 
     useEffect(() => {
-        if (game.length > 1 && round + 1 > game.length) {
+        if (game.length > 1 && round + 1 > game.length / 2) {
             setGame(nextGame);
             setNextGame([]);
             setRound(0);
         }
+        
+        // 이 부분에 else if로 우승을 리턴하면 안되는 이유?
         
     }, [round]);
 
@@ -63,7 +65,7 @@ function Worldcup() {
             <p>이상형 월드컵 우승</p>
             <img src={game[0].src} /> <p>{game[0].name}</p>
         </div>
-    }
+    }    
 
     if (game.length == 0 || round + 1 > game.length / 2) return <p>로딩중입니다.</p>;
     return <div>
