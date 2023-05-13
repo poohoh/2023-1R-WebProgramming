@@ -18,31 +18,33 @@ import p16 from './assets/한지민.jpg';
 
 function Worldcup() {
     const candidate = [
-        {name:'고윤정', src: p01},
-        {name:'김태희', src: p02},
-        {name:'김혜수', src: p03},
-        {name:'김희선', src: p04},
-        {name:'문채원', src: p05},
-        {name:'배수지', src: p06},
-        {name:'손예진', src: p07},
-        {name:'송혜교', src: p08},
-        {name:'신민아', src: p09},
-        {name:'신세경', src: p10},
-        {name:'이영애', src: p11},
-        {name:'이주빈', src: p12},
-        {name:'전지현', src: p13},
-        {name:'하지원', src: p14},
-        {name:'한가인', src: p15},
-        {name:'한지민', src: p16}
+        { name: '고윤정', src: p01 },
+        { name: '김태희', src: p02 },
+        { name: '김혜수', src: p03 },
+        { name: '김희선', src: p04 },
+        { name: '문채원', src: p05 },
+        { name: '배수지', src: p06 },
+        { name: '손예진', src: p07 },
+        { name: '송혜교', src: p08 },
+        { name: '신민아', src: p09 },
+        { name: '신세경', src: p10 },
+        { name: '이영애', src: p11 },
+        { name: '이주빈', src: p12 },
+        { name: '전지현', src: p13 },
+        { name: '하지원', src: p14 },
+        { name: '한가인', src: p15 },
+        { name: '한지민', src: p16 }
     ];
 
     const [game, setGame] = useState([]);
     const [round, setRound] = useState(0);
     const [nextGame, setNextGame] = useState([]);
+    const [selectedImage, setSelectedImage] = useState(null);
+
 
     useEffect(() => {
         setGame(candidate.map(c => {
-            return {name: c.name, src: c.src, order: Math.random()}
+            return { name: c.name, src: c.src, order: Math.random() }
         }).sort((l, r) => {
             return l.order - r.order;
         })
@@ -55,34 +57,64 @@ function Worldcup() {
             setNextGame([]);
             setRound(0);
         }
-        
+
         // 이 부분에 else if로 우승을 리턴하면 안되는 이유?
-        
+
     }, [round]);
 
-    if ( game.length == 1) {
+    if (game.length == 1) {
         return <div>
             <p>이상형 월드컵 우승</p>
-            <img src={game[0].src} /> <p>{game[0].name}</p>
+            <img src={game[0].src} style={{ width: "70%" }} /> <p>{game[0].name}</p>
         </div>
-    }    
+    }
 
     if (game.length == 0 || round + 1 > game.length / 2) return <p>로딩중입니다.</p>;
+
     return <div>
-        <p>이상형 월드컵 {round + 1} / {game.length / 2}  <b>{game.length === 2 ? "결승" : game.length + "강"}</b></p>
+        <p style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>이상형 월드컵 {round + 1} / {game.length / 2}  <b>{game.length === 2 ? "결승" : game.length + "강"}</b></p>
         <div style={{ display: "flex", flexDirection: "row" }}>
-            <img src={game[round * 2].src} onClick={() => {
-                setNextGame((prev) => prev.concat(game[round * 2]))
-                setRound(round => round + 1);
-            }} />
-            <img src={game[round * 2 + 1].src} onClick={() => {
-                setNextGame((prev) => prev.concat(game[round * 2 + 1]))
-                setRound(round => round + 1);
-            }}/>
+            <div style={{ position: "relative", width: "50%", display: selectedImage === round * 2 || selectedImage === null ? "block" : "none" }}>
+                <img
+                    src={game[round * 2].src}
+                    onClick={() => {
+                        setSelectedImage(round * 2);
+                        setTimeout(() => {
+                            setSelectedImage(null);
+                            setNextGame((prev) => prev.concat(game[round * 2]));
+                            setRound((round) => round + 1);
+                        }, 3000);
+                        
+                    }}
+                    style={{ width: "100%", height: "100%"}}
+                />
+                <div style={{ position: "absolute", bottom: "10%", left: "40%", textShadow: "2px 2px 2px black", fontSize: "300%" }}>
+                    {game[round * 2].name}
+                </div>
+            </div>
+
+            <div style={{ position: "relative", width: "50%", display: selectedImage === round * 2 + 1 || selectedImage === null ? "block" : "none" }}>
+                <img
+                    src={game[round * 2 + 1].src}
+                    onClick={() => {
+                        setSelectedImage(round * 2 + 1);
+                        setTimeout(() => {
+                            setSelectedImage(null);
+                            setNextGame((prev) => prev.concat(game[round * 2 + 1]));
+                            setRound((round) => round + 1);
+                        }, 3000);
+                        
+                    }}
+                    style={{ width: "100%", height: "100%"}}
+                />
+                <div style={{ position: "absolute", bottom: "10%", left: "40%", textShadow: "2px 2px 2px black", fontSize: "300%" }}>
+                    {game[round * 2 + 1].name}
+                </div>
+            </div>
         </div>
     </div>
-    
-    ;
+
+        ;
 }
 
 export default Worldcup;
